@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=DM+Mono:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -932,6 +933,129 @@ body.on-landing .nav { display: none; }
   }
 }
 
+
+/* ══════════════════════════════
+   FORM DE ACESSO NA LANDING
+══════════════════════════════ */
+.lnd-access-panel {
+  max-width: 420px;
+}
+
+.lnd-lead-form {
+  display: grid;
+  gap: 14px;
+  max-width: 400px;
+}
+
+.lnd-field {
+  display: grid;
+  gap: 7px;
+}
+
+.lnd-field label {
+  font-family: var(--ff-mono);
+  font-size: 8.5px;
+  font-weight: 300;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--ink-low);
+}
+
+.lnd-field label span {
+  letter-spacing: 1.4px;
+  opacity: 0.7;
+}
+
+.lnd-field input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 300;
+  padding: 14px 15px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.lnd-field input:focus {
+  border-color: var(--border-hi);
+  background: var(--surface);
+}
+
+.lnd-field input::placeholder {
+  color: var(--ink-low);
+}
+
+.lnd-lead-form .lnd-btn {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.lnd-form-status {
+  min-height: 18px;
+  font-size: 12px;
+  color: var(--ink-mid);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+
+/* ══════════════════════════════
+   FIX LANDING MOBILE - NÃO ROLAR PARA SLIDES
+══════════════════════════════ */
+body.on-landing {
+  overflow: hidden !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+}
+
+body.on-landing #landing {
+  position: fixed !important;
+  inset: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  width: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.on-landing .presentation {
+  height: 100vh !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 768px) {
+  body.on-landing #landing {
+    display: block !important;
+    position: fixed !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    overflow-y: auto !important;
+  }
+
+  body.on-landing .lnd-image {
+    height: 38vh !important;
+    min-height: 240px;
+  }
+
+  body.on-landing .lnd-content {
+    min-height: auto !important;
+    padding: 36px 24px 86px !important;
+  }
+
+  body.on-landing .lnd-foot {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    margin-top: 34px;
+  }
+}
+
 </style>
 </head>
 <body class="on-landing">
@@ -947,13 +1071,39 @@ body.on-landing .nav { display: none; }
       <strong>ao lançamento.</strong>
     </h1>
     <div class="lnd-divider"></div>
-    <p class="lnd-description">
-      Toda coleção começa com uma ideia. O desafio está em transformar essa ideia em produto, coordenando equipes, fornecedores e decisões sem perder velocidade pelo caminho.<br><br>
-      O Power View foi criado para tornar essa jornada simples, conectada e previsível.
-    </p>
-    <button class="lnd-btn" id="enterBtn">
-      Acessar apresentação <i class="ph ph-arrow-right"></i>
+    
+<div class="lnd-access-panel">
+  <p class="lnd-description">
+    Toda coleção começa com uma ideia. O desafio está em transformar essa ideia em produto, coordenando equipes, fornecedores e decisões sem perder velocidade pelo caminho.
+    <br><br>
+    Informe seus dados para acessar a apresentação.
+  </p>
+
+  <form id="leadInlineForm" class="lnd-lead-form">
+    <div class="lnd-field">
+      <label for="leadName">Nome</label>
+      <input type="text" id="leadName" name="name" placeholder="Seu nome" required>
+    </div>
+
+    <div class="lnd-field">
+      <label for="leadPhone">Telefone</label>
+      <input type="tel" id="leadPhone" name="phone" placeholder="Seu telefone" required>
+    </div>
+
+    <div class="lnd-field">
+      <label for="leadIndicatedBy">Quem indicou? <span>Opcional</span></label>
+      <input type="text" id="leadIndicatedBy" name="indicatedBy" placeholder="Nome de quem indicou">
+    </div>
+
+    <button class="lnd-btn" type="submit">
+      Acessar apresentação
+      <i class="ph ph-arrow-right"></i>
     </button>
+
+    <div id="leadError" class="lnd-form-status"></div>
+  </form>
+</div>
+
     <span class="lnd-foot">&copy; 2026 Power View</span>
   </div>
 </div>
@@ -1732,5 +1882,173 @@ document.getElementById('enterBtn').addEventListener('click', function() {
 });
 
 </script>
+<script>
+(function() {
+  const EMAILJS_PUBLIC_KEY = "dhuV6Jc0wBsx6fpiq";
+  const EMAILJS_SERVICE_ID = "service_appypze";
+  const EMAILJS_TEMPLATE_ID = "template_nc9dd85";
+
+  if (window.emailjs) {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
+  function accessPresentation() {
+    const landing = document.getElementById("landing");
+    if (landing) landing.classList.add("hidden");
+
+    document.body.classList.remove("on-landing");
+
+    if (typeof resetActiveSlideScroll === "function") {
+      resetActiveSlideScroll();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function getLeadData() {
+    const params = new URLSearchParams(window.location.search);
+
+    return {
+      lead: document.getElementById("leadName")?.value || "Visitante não identificado",
+      name: document.getElementById("leadName")?.value || "",
+      phone: document.getElementById("leadPhone")?.value || "",
+      indicatedBy: document.getElementById("leadIndicatedBy")?.value || "",
+      linkLead: params.get("lead") || "",
+      date: new Date().toLocaleString("pt-BR"),
+      url: window.location.href,
+      userAgent: navigator.userAgent
+    };
+  }
+
+  function setupInlineLeadForm() {
+    const form = document.getElementById("leadInlineForm");
+    const status = document.getElementById("leadError");
+
+    if (!form) return;
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = getLeadData();
+
+      if (!data.name || !data.phone) {
+        if (status) status.textContent = "Preencha nome e telefone para continuar.";
+        return;
+      }
+
+      if (status) status.textContent = "Registrando acesso...";
+
+      if (!window.emailjs) {
+        accessPresentation();
+        return;
+      }
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data)
+        .then(function() {
+          if (status) status.textContent = "";
+          accessPresentation();
+        })
+        .catch(function(error) {
+          console.error("Erro EmailJS:", error);
+          if (status) status.textContent = "Não foi possível registrar agora. A apresentação será aberta mesmo assim.";
+          setTimeout(accessPresentation, 700);
+        });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupInlineLeadForm);
+  } else {
+    setupInlineLeadForm();
+  }
+})();
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const phoneInput = document.getElementById('leadPhone');
+  const form = document.getElementById('leadInlineForm');
+  const status = document.getElementById('leadError');
+
+  if (!phoneInput || !form) return;
+
+  phoneInput.setAttribute('maxlength', '15');
+  phoneInput.setAttribute('placeholder', '(11) 99999-9999');
+  phoneInput.setAttribute('inputmode', 'numeric');
+  phoneInput.setAttribute('autocomplete', 'tel');
+
+  phoneInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+
+    if (value.length > 11) value = value.slice(0, 11);
+
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+    } else if (value.length > 6) {
+      value = value.replace(/^(\d{2})(\d{4})(\d+).*/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d{2})(\d+).*/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/^(\d+)/, '($1');
+    }
+
+    e.target.value = value;
+  });
+
+  form.addEventListener('submit', function(ev) {
+    const digits = phoneInput.value.replace(/\D/g, '');
+
+    if (digits.length < 10 || digits.length > 11) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+
+      if (status) {
+        status.textContent = 'Informe um telefone válido com DDD.';
+      } else {
+        alert('Informe um telefone válido com DDD.');
+      }
+
+      phoneInput.focus();
+      return false;
+    }
+  }, true);
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const landing = document.getElementById('landing');
+
+  function lockLandingScroll() {
+    if (document.body.classList.contains('on-landing')) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    }
+  }
+
+  lockLandingScroll();
+
+  if (landing) {
+    landing.addEventListener('touchmove', function(e) {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  const observer = new MutationObserver(function() {
+    if (!document.body.classList.contains('on-landing')) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    }
+  });
+
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+});
+</script>
+
 </body>
 </html>
