@@ -146,13 +146,21 @@ html, body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .slide.active .a { opacity: 0; animation: fadeUp 0.5s ease forwards; }
-.slide.active .a:nth-child(1) { animation-delay: 0.05s; }
-.slide.active .a:nth-child(2) { animation-delay: 0.13s; }
-.slide.active .a:nth-child(3) { animation-delay: 0.21s; }
-.slide.active .a:nth-child(4) { animation-delay: 0.29s; }
-.slide.active .a:nth-child(5) { animation-delay: 0.37s; }
-.slide.active .a:nth-child(6) { animation-delay: 0.45s; }
-.slide.active .a:nth-child(7) { animation-delay: 0.53s; }
+.slide.active .a:nth-child(1)  { animation-delay: 0.04s; }
+.slide.active .a:nth-child(2)  { animation-delay: 0.10s; }
+.slide.active .a:nth-child(3)  { animation-delay: 0.16s; }
+.slide.active .a:nth-child(4)  { animation-delay: 0.22s; }
+.slide.active .a:nth-child(5)  { animation-delay: 0.28s; }
+.slide.active .a:nth-child(6)  { animation-delay: 0.34s; }
+.slide.active .a:nth-child(7)  { animation-delay: 0.40s; }
+.slide.active .a:nth-child(8)  { animation-delay: 0.46s; }
+.slide.active .a:nth-child(9)  { animation-delay: 0.52s; }
+.slide.active .a:nth-child(10) { animation-delay: 0.58s; }
+.slide.active .a:nth-child(11) { animation-delay: 0.64s; }
+.slide.active .a:nth-child(12) { animation-delay: 0.70s; }
+.slide.active .a:nth-child(13) { animation-delay: 0.76s; }
+.slide.active .a:nth-child(14) { animation-delay: 0.82s; }
+.slide.active .a:nth-child(15) { animation-delay: 0.88s; }
 
 /* ── SHARED ── */
 .eyebrow {
@@ -424,7 +432,7 @@ html, body {
   .slide {
     position: absolute; inset: 0;
     min-height: 100vh; height: auto;
-    padding: 90px 22px 112px;
+    padding: 72px 22px 100px;
     justify-content: flex-start; align-items: stretch;
     overflow-y: auto;
   }
@@ -894,13 +902,6 @@ body.on-landing .nav { display: none; }
 /* ══════════════════════════════
    SCROLL INTERNO POR SLIDE
 ══════════════════════════════ */
-.slide {
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
 .slide > * {
   flex-shrink: 0;
 }
@@ -910,6 +911,9 @@ body.on-landing .nav { display: none; }
     justify-content: flex-start;
     padding-top: 104px;
     padding-bottom: 124px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   .slide.active {
@@ -1886,14 +1890,24 @@ document.addEventListener('keydown', e => {
 updateUI();
 ruleProgress.style.width = '0%';
 
+// Trigger animation on initial slide
+slides[cur].querySelectorAll('.a').forEach(el => {
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = '';
+});
+
 // ── Landing transition
 document.body.classList.add('on-landing');
 const landing = document.getElementById('landing');
-document.getElementById('enterBtn').addEventListener('click', function() {
-  landing.classList.add('hidden');
-  document.body.classList.remove('on-landing');
-  setTimeout(function() { landing.style.display = 'none'; }, 750);
-});
+const enterBtn = document.querySelector('.lnd-btn[type="submit"]') || document.querySelector('.lnd-btn') || document.getElementById('enterBtn');
+if (enterBtn) {
+  enterBtn.addEventListener('click', function() {
+    landing.classList.add('hidden');
+    document.body.classList.remove('on-landing');
+    setTimeout(function() { landing.style.display = 'none'; }, 750);
+  });
+}
 
 </script>
 <script>
