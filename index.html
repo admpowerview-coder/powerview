@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Power View</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1144,6 +1144,24 @@ body:not(.on-landing) .slide > * {
   }
 }
 
+
+/* ══════════════════════════════
+   FIX MOBILE - EVITAR ZOOM AO FOCAR INPUT
+══════════════════════════════ */
+@media (max-width: 900px) {
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 16px !important;
+  }
+
+  .lnd-field input {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+}
+
 </style>
 </head>
 <body class="on-landing">
@@ -1846,7 +1864,7 @@ body:not(.on-landing) .slide > * {
       <div class="metric-grid a">
         <div class="metric-card">
           <div class="num">R$ 18 mil</div>
-          <div class="lbl">Investimento</div>
+          <div class="lbl">Investimento inicial</div>
         </div>
         <div class="metric-card">
           <div class="num">30%</div>
