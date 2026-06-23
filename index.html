@@ -412,23 +412,23 @@ html, body {
 ══════════════════════════════ */
 @media (max-width: 900px) {
   html, body {
-    height: auto;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 100dvh;
+    overflow: hidden;
     user-select: auto;
   }
   .chrome-top { padding: 18px 22px; }
   .rule-line, .rule-progress { top: 58px; }
-  .presentation { height: auto; min-height: 100vh; }
+  .presentation { position: fixed; inset: 0; height: 100dvh; }
   .slide {
     position: absolute; inset: 0;
-    min-height: 100vh; height: auto;
-    padding: 90px 22px 112px;
+    height: 100dvh;
+    padding: 72px 18px 108px;
     justify-content: flex-start; align-items: stretch;
-    overflow-y: auto;
+    overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
-  .slide.active { position: relative; }
+  .slide.active { opacity: 1; transform: none; pointer-events: all; }
   .slide:not(.active) { display: none; }
   .s1, .s2, .s3, .sph { max-width: 100%; width: 100%; }
   .s1-title { font-size: clamp(56px, 18vw, 86px); letter-spacing: -2px; }
@@ -460,7 +460,7 @@ html, body {
 @media (max-width: 520px) {
   .logo-name { display: none; }
   .counter { font-size: 9px; }
-  .slide { padding: 82px 18px 112px; }
+  .slide { padding: 68px 18px 108px; }
   .eyebrow { font-size: 7.5px; letter-spacing: 2px; }
   .s2-title { font-size: clamp(30px, 11vw, 40px); }
   .kgrid { grid-template-columns: 1fr; }
@@ -891,19 +891,7 @@ body.on-landing .nav { display: none; }
 }
 
 
-/* ══════════════════════════════
-   SCROLL INTERNO POR SLIDE
-══════════════════════════════ */
-.slide {
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-.slide > * {
-  flex-shrink: 0;
-}
+/* scroll interno removido */
 
 @media (min-width: 901px) {
   .slide {
@@ -1030,138 +1018,33 @@ body.on-landing .presentation {
 }
 
 @media (max-width: 768px) {
-  body.on-landing #landing {
-    display: block !important;
-    position: fixed !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    overflow-y: auto !important;
+  /* Landing scrolls freely on mobile */
+  body.on-landing html,
+  body.on-landing body {
+    height: auto !important;
+    overflow: auto !important;
   }
-
-  body.on-landing .lnd-image {
-    height: 38vh !important;
-    min-height: 240px;
+  #landing {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    position: fixed;
   }
-
-  body.on-landing .lnd-content {
-    min-height: auto !important;
-    padding: 36px 24px 86px !important;
-  }
-
-  body.on-landing .lnd-foot {
-    position: relative !important;
-    left: auto !important;
-    bottom: auto !important;
-    margin-top: 34px;
-  }
+  .lnd-image { height: 42vh; min-height: 240px; }
+  .lnd-content { padding: 32px 22px 80px; }
+  .lnd-foot { position: relative; left: auto; bottom: auto; margin-top: 28px; }
 }
 
 
 
 
-/* ══════════════════════════════
-   FIX DEFINITIVO MOBILE - SLIDE VISÍVEL COM SCROLL
-══════════════════════════════ */
-body:not(.on-landing) {
-  height: 100vh !important;
-  height: 100dvh !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
 
-body:not(.on-landing) .presentation {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
+/* fix definitivo removido */
 
-body:not(.on-landing) .slide {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  justify-content: flex-start !important;
-  opacity: 0;
-  pointer-events: none;
-}
+/* fix zoom removido */
 
-body:not(.on-landing) .slide.active {
-  display: flex !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  transform: translateX(0) !important;
-}
-
-body:not(.on-landing) .slide:not(.active) {
-  display: none !important;
-}
-
-body:not(.on-landing) .slide > * {
-  flex-shrink: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-@media (min-width: 901px) {
-  body:not(.on-landing) .slide {
-    align-items: center !important;
-    padding: 96px 80px 118px !important;
-  }
-}
-
-@media (max-width: 900px) {
-  html,
-  body:not(.on-landing) {
-    height: 100vh !important;
-    height: 100dvh !important;
-    overflow: hidden !important;
-  }
-
-  body:not(.on-landing) .slide {
-    align-items: stretch !important;
-    padding: 76px 18px 116px !important;
-  }
-
-  body:not(.on-landing) .s1,
-  body:not(.on-landing) .s2,
-  body:not(.on-landing) .s3,
-  body:not(.on-landing) .sph,
-  body:not(.on-landing) .s-grifes,
-  body:not(.on-landing) .s-founder {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-}
-
-
-/* ══════════════════════════════
-   FIX MOBILE - EVITAR ZOOM AO FOCAR INPUT
-══════════════════════════════ */
-@media (max-width: 900px) {
-  input,
-  textarea,
-  select,
-  button {
-    font-size: 16px !important;
-  }
-
-  .lnd-field input {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
-  }
-}
-
+/* Prevent iOS zoom on input focus */
+input, textarea, select { font-size: max(16px, 1em); }
 </style>
 </head>
 <body class="on-landing">
@@ -1201,7 +1084,7 @@ body:not(.on-landing) .slide > * {
       <input type="text" id="leadIndicatedBy" name="indicatedBy" placeholder="Nome de quem indicou">
     </div>
 
-    <button class="lnd-btn" type="submit">
+    <button class="lnd-btn" id="enterBtn" type="submit">
       Acessar apresentação
       <i class="ph ph-arrow-right"></i>
     </button>
@@ -1863,7 +1746,7 @@ body:not(.on-landing) .slide > * {
 
       <div class="metric-grid a">
         <div class="metric-card">
-          <div class="num">R$ 18 mil</div>
+          <div class="num">R$ 12 mil</div>
           <div class="lbl">Investimento inicial</div>
         </div>
         <div class="metric-card">
@@ -1976,6 +1859,8 @@ function go(idx) {
 
   cur = idx;
   slides[cur].classList.add('active');
+  // Reset scroll position of new slide to top
+  slides[cur].scrollTop = 0;
   updateUI();
 }
 
@@ -1995,11 +1880,16 @@ ruleProgress.style.width = '0%';
 // ── Landing transition
 document.body.classList.add('on-landing');
 const landing = document.getElementById('landing');
-document.getElementById('enterBtn').addEventListener('click', function() {
-  landing.classList.add('hidden');
-  document.body.classList.remove('on-landing');
-  setTimeout(function() { landing.style.display = 'none'; }, 750);
-});
+const enterBtn = document.getElementById('enterBtn')
+  || document.querySelector('.lnd-btn[type="submit"]')
+  || document.querySelector('.lnd-btn');
+if (enterBtn) {
+  enterBtn.addEventListener('click', function() {
+    if (landing) landing.classList.add('hidden');
+    document.body.classList.remove('on-landing');
+    setTimeout(function() { if (landing) landing.style.display = 'none'; }, 750);
+  });
+}
 
 </script>
 <script>
@@ -2144,84 +2034,14 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const landing = document.getElementById('landing');
-
-  function lockLandingScroll() {
-    if (document.body.classList.contains('on-landing')) {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      window.scrollTo(0, 0);
-    }
-  }
-
-  lockLandingScroll();
-
-  if (landing) {
-    landing.addEventListener('touchmove', function(e) {
-      e.stopPropagation();
-    }, { passive: true });
-  }
-
-  const observer = new MutationObserver(function() {
-    if (!document.body.classList.contains('on-landing')) {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      window.scrollTo(0, 0);
-    }
-  });
-
-  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-});
-</script>
+<!-- scroll lock script removed -->
 
 
 
 
 
 
-<script>
-(function() {
-  function resetSlideTop() {
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-
-    const active = document.querySelector('.slide.active');
-    if (active) active.scrollTop = 0;
-  }
-
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.nbtn') || e.target.closest('.dot')) {
-      setTimeout(resetSlideTop, 80);
-    }
-  }, true);
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      setTimeout(resetSlideTop, 80);
-    }
-  }, true);
-
-  document.addEventListener('submit', function(e) {
-    if (e.target && e.target.id === 'leadInlineForm') {
-      setTimeout(resetSlideTop, 150);
-      setTimeout(resetSlideTop, 700);
-    }
-  }, true);
-
-  const bodyObserver = new MutationObserver(function() {
-    if (!document.body.classList.contains('on-landing')) {
-      setTimeout(resetSlideTop, 120);
-    }
-  });
-
-  bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-  window.resetSlideTop = resetSlideTop;
-})();
-</script>
+<!-- resetSlideTop script removed -->
 
 </body>
 </html>
